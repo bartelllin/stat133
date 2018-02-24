@@ -1,0 +1,153 @@
+---
+title: "Untitled"
+name: "Bartell Lin"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Data Import
+```{r}
+#install.packages("readr")
+library(readr)
+#install.packages("corrplot")
+library(corrplot)
+```
+
+```{r}
+colnames <- c("symboling", "normalized_losses", "make", "fuel_type", "aspiration", "num_of_doors", "body_style", "drive_wheels", "engine_location", "wheel_base", "length", "width", "height", "curb_weight", "engine_type", "num_of_cylinders", "engine_size", "fuel_system", "bore", "stroke", "compression_ratio", "horsepower", "peak_rpm", "city_mpg", "highway_mpg", "price")
+
+ctype <- c("real", "double", "character", "character", "character", "character", "character", "character", "character", "double", "double", "double", "double", "integer", "character", "character", "integer", "character", "double", "double", "double", "integer", "integer", "integer", "integer", "integer")
+
+ctype2 <- c(symboling = col_double(), normalized_losses = col_double(), make = col_character(), fuel_type = col_character(), aspiration = col_character(), num_of_doors = col_character(), body_style = col_character(), drive_wheels = col_character(), engine_location = col_character(), wheel_base = col_character(), length = col_double(), width = col_double(), height = col_double(), curb_weight = col_integer(), engine_type = col_character(), num_of_cylinders = col_character(), engine_size = col_integer(), fuel_system = col_character(), bore = col_double(), stroke = col_double(), compression_ratio = col_double(), horsepower = col_integer(), peak_rpm = col_integer(), city_mpg = col_integer(), highway_mpg = col_integer(), price = col_integer())
+
+
+dat <- read.csv(file = "imports-85.data", na.strings = "?", skipNul = TRUE, col.names = colnames, colClasses = ctype, sep = ",", stringsAsFactors = FALSE)
+str(dat)
+
+dat2 <- read_csv(file = "imports-85.data", col_names = colnames, col_types = ctype2, na = "?")
+str(dat2)
+```
+
+##Technical Questions
+
+a. It uses the first line of the file as the title.
+b. The titles become V[column number].
+c. They are converted to characters.
+d. The second one is bigger because it you are specifying the data types, which takes up memory. The first uses default settings and takes less memory.
+e. They data types will all be the same instead of having individual types.
+
+
+##Practice Base Plotting
+
+```{r}
+hist(dat$price, col = "blue")
+```
+The histogram shows that most of the prices are on the lower end of 10000. The center is shifted to the left and there is big decrease in frequency as prices increase. The graph is skewed to the right.
+
+
+
+```{r}
+boxplot(dat$horsepower, horizontal = TRUE)
+
+```
+
+The boxplot shows that the median is around 100. It is skewed to the right. There are more outliers on the higher end of the boxplot than the lower end. This means that the upper values are more spread out while the lower values are more clustered together. The first and third quartiles are around 75 and 120. 
+
+
+
+```{r}
+barplot(sort(table(dat$body_style), decreasing = TRUE))
+
+```
+
+The graph shows that there are more sedans than any other body style. It also shows how convertibles are the least frequent body style. Most of the data is centered around sedan and hatchback. There is a big drop when we compare the rest to the first two. 
+
+
+```{r}
+test <- data.frame(dat$wheel_base, dat$length, dat$width, dat$height, dat$price)
+stars(test)
+
+
+```
+
+
+
+##Summaries
+
+```{r}
+
+df <- as.data.frame(dat)
+df[is.na(df)] <- 0
+test <- df["fuel_type"] == "gas"
+gas <- mean(df$price[test])
+diesal <- mean(df$price[!test])
+b <- df["num_of_cylinders"] == "twelve"
+b <- df$make[b]
+c <- sort(table(df$make[!test]), decreasing = TRUE)
+c <- names(c)[1]
+d <- df$horsepower == max(df$horsepower)
+d <- df$price[d]
+e <-tail(sort(df$city_mpg, decreasing = TRUE), nrow(df)/10)
+f <- head(sort(df$highway_mpg, decreasing = TRUE), nrow(df)/10)
+g <- df[ "city_mpg"] == e
+g <- median(df$price[g])
+```
+
+
+##Technical Questions
+
+a.  It returns null.
+b.  2, 3, 5, and 6 fail to return the vector mpg.
+c.  They either don't have the correct syntax or assume the column index for mpg.
+d.  Yes because each component is passed in as a separate argument.
+e.  It creates a list for each column containing elements from that column.
+f.  You can use as.data.frame to convert it back to a data frame.
+
+
+
+##Correlations of Quantitative Variables
+
+
+```{r}
+qdat <- dat[ , c(10, 11, 12, 13, 14, 19, 20, 21, 22, 23, 24, 25, 26)]
+qdat[is.na(qdat)] <- 0
+qdat <- cor(qdat)
+#qdat <- na.omit(qdat)
+corrplot(qdat, method = "circle")
+corrplot(qdat, method = "pie")
+```
+
+
+From the two correlograms above, I can see that there some interesting correlations. Things like length, width, and weight geatively corrolate to mpg but positively to price and horsepower. These corrolations can be used to see what are the best qualities of a car and what factors contribute to various aspects of the car. Most of the things in the middle have very little correlation to the other variables, but those on the ends have higher correlations to each other. For example, stoke only correlate to bore, but price has high correlations with more than half the other variables.
+
+
+##Principle Component Analysis
+
+
+```{r}
+pca <- prcomp(qdat, scale. = TRUE)
+eigen <- pca$sdev^2
+eigs <- eigen
+eigs_perc <- 100 * eigs / sum(eigs)
+eigs_cum <- cumsum(eigs_perc)
+eigs_df <- data.frame(
+  eigenvalue = eigs,
+  percentage = eigs_perc,
+  'cumulative percentage' = eigs_cum
+)
+prop_of_var <- head(print(round(eigs_df, 4), print.gap = 2), 3)
+
+
+```
+
+
+```{r}
+
+biplot(pca, scale = 1)
+```
+
+From the plot above, I can see that the values are a little from each other. The two PC's have the same general shape. PC1 is red and PC2 is black. There are some obvious differences like with city_mpg and highway_mpg. PC2's eigenvalues are generally much closer to zero than those of PC1. Most of the data is clustered around the left side. This indicates that PC2's values are hovering around zero while PC1 has larger negative numbers.
+

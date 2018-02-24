@@ -1,0 +1,1 @@
+This is my homework 1. This homework focuses on data frames basics. The purpose of these exercises is to practice basic manipulation operations for data frames, and other analytical tasks.

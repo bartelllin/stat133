@@ -1,0 +1,8 @@
+This is the Automobile Data Set from the UCI Machine Learning Repository. The data was collected by Jeffrey C. Schlimmer on 19 May 1987. The sources used are:
+     1) 1985 Model Import Car and Truck Specifications, 1985 Ward's
+        Automotive Yearbook.
+     2) Personal Auto Manuals, Insurance Services Office, 160 Water
+        Street, New York, NY 10038 
+     3) Insurance Collision Report, Insurance Institute for Highway
+        Safety, Watergate 600, Washington, DC 20037
+This data set consists of three types of entities: the specification of an auto in terms of various characteristics, its assigned insurance risk rating, and its normalized losses in use as compared to other cars. There are a couple missing values denoted by a "?." In total, there are 15 continuous variables, 1 real variable, and 10 nominal variables. 
