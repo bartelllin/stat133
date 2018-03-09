@@ -1,0 +1,1 @@
+This lab is focused on giving us more practice with data.frames/tibbles and producing plots but with "dplyr" and "ggplot." It will also include a more complex file structure. This HW will include visualizing shot data of NBA players.
