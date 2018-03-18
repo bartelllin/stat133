@@ -1,0 +1,91 @@
+---
+title: "hw3"
+author: "Bartell Lin"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error = TRUE, fig.path = "images/")
+```
+
+```{r}
+dat <- read.csv("nba2017-roster.csv")
+```
+
+```{bash}
+cut -d "," -f 2 nba2017-roster.csv | sort -u > team-names.txt
+head -n 5 team-names.txt
+```
+
+```{bash}
+cut -d "," -f 3 nba2017-roster.csv | sort -u > position-names.txt
+head -n 5 position-names.txt
+```
+
+```{bash}
+cut -d "," -f 7 nba2017-roster.csv | tail +2 | sort -n | uniq -c > experience-counts.txt
+head -n 5 experience-counts.txt
+```
+
+```{bash}
+grep "team" nba2017-roster.csv > temp.csv
+grep "LAC" nba2017-roster.csv > t.csv
+cat temp.csv t.csv > LAC.csv
+cat LAC.csv
+```
+
+```{bash}
+grep "LAL" nba2017-roster.csv| cut -d "," -f 6 | sort -n | uniq -c 
+```
+
+```{bash}
+grep "CLE" nba2017-roster.csv| cut -d "," -f 2 | uniq -c
+```
+
+```{bash}
+grep "position" nba2017-roster.csv| cut -d "," -f 1,4,5 > temp.csv
+grep "GSW" nba2017-roster.csv| cut -d "," -f 1,4,5 > t.csv
+cat temp.csv t.csv > gsw-height-weight.csv
+cat gsw-height-weight.csv
+```
+
+```{bash}
+cut -d "," -f 1,8 nba2017-roster.csv | sort -t "," -k 2 -n -r | head -n 10 > top10-salaries.csv
+cat top10-salaries.csv
+```
+
+
+```{r}
+source("code/binomial-functions.R")
+```
+
+```{r}
+bin_probability(10, 3, 1/6)
+```
+
+```{r}
+df1 <- bin_distribution(10, .25)
+df1
+barplot(df1[[2]], names.arg = df1[[1]])
+```
+
+```{r}
+prob <- 0
+for (i in 4:5) {
+  prob <- prob + bin_probability(5, i, .35) 
+}
+prob
+```
+
+```{r}
+df2 <- bin_distribution(15, .35)
+df2
+barplot(df2[[2]], names.arg = df2[[1]])
+```
+
+
+
+
+
+
+
