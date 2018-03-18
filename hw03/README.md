@@ -1,0 +1,1 @@
+The purpose of this hw is to work with shell pipelines and redirections commands. The second purpose is to begin practicing some of the programming concepts that will be cover in the course.
