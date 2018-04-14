@@ -1,0 +1,1 @@
+This homework will focus on working with strings. It contains practice with some basic/intermediate manipulations of strings and regular expressions.
