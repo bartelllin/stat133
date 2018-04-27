@@ -1,18 +1,12 @@
----
-title: "hw05"
-author: "bartell lin"
-output: github_document
----
+hw05
+================
+bartell lin
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r}
+``` r
 library("dieroller")
 ```
 
-```{r problem 1}
+``` r
 dice <- die()
 count <- 0
 for (i in 1:1000) {
@@ -22,12 +16,18 @@ for (i in 1:1000) {
   }
 }
 count
+```
+
+    ## [1] 519
+
+``` r
 freq <- count/1000
 freq
 ```
 
+    ## [1] 0.519
 
-```{r problem 2}
+``` r
 d1 <- die()
 d2 <- die()
 c <- 0
@@ -45,6 +45,13 @@ for (i in 1:1000) {
   }
 }
 c
+```
+
+    ## [1] 509
+
+``` r
 freq <- c/1000
 freq
 ```
+
+    ## [1] 0.509
