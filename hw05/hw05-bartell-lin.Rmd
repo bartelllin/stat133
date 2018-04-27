@@ -1,0 +1,50 @@
+---
+title: "hw05"
+author: "bartell lin"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("dieroller")
+```
+
+```{r problem 1}
+dice <- die()
+count <- 0
+for (i in 1:1000) {
+  t <- roll(dice, 4)
+  if (6 %in% t$rolls) {
+    count <- count + 1
+  }
+}
+count
+freq <- count/1000
+freq
+```
+
+
+```{r problem 2}
+d1 <- die()
+d2 <- die()
+c <- 0
+for (i in 1:1000) {
+  t1 <- roll(d1, 24)
+  t2 <- roll(d2, 24)
+  temp <- 0
+  for (i in 1:24) {
+    if (t1[i] == 6 & t2[i] == 6) {
+      temp <- temp + 1
+    }
+  }
+  if (temp > 0) {
+    c <- c + 1
+  }
+}
+c
+freq <- c/1000
+freq
+```
